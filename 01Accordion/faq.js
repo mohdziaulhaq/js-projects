@@ -18,19 +18,57 @@ const faqData = [
   },
 ];
 
-const accordianBody;
-const faqs = [];
-
 function showFaq() {
-  
+  let button = document.querySelectorAll(".show_btn");
+  button.forEach((element)=>{
+
+    element.addEventListener('click',()=>{ 
+      if(element.parentElement.nextElementSibling.className=="hidden"){
+        
+        element.parentElement.nextElementSibling.removeAttribute("class")
+        element.textContent = "-";
+      }
+      else {
+        element.parentElement.nextElementSibling.classList.add("hidden");
+        element.textContent = "+";
+      }
+      
+     })
+  })
 }
 
 function createFaq() {
+  let accordian_body =  document.querySelector(".accordian_body");
+  
+  faqData.forEach((data)=>{
+    let faq = document.createElement("div");
+    faq.classList.add('faq');
+
+    let header = document.createElement("div");
+    header.classList.add("faq_header");
+    
+    let q = document.createElement('h3');
+    q.textContent = data.question;
+
+    let btn = document.createElement("button");
+    btn.textContent = "+";
+    btn.classList.add("show_btn");
+
+    header.append(btn);
+    header.append(q);
+
+    let a = document.createElement('p');
+    a.textContent = data.answer;
+    a.classList.add("hidden");
+
+    faq.append(header);
+    faq.append(a);
+
+    accordian_body.append(faq);
+    console.log(faq);
+  })
   
 }
 
-function btnStatusUpdate() {
-  
-}
-
-
+createFaq();
+showFaq();
