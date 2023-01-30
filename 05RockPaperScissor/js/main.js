@@ -1,22 +1,100 @@
-let rock = document.getElementById("r");
-let paper = document.getElementById("p");
-let scissors = document.getElementById("s");
-for(let i=0;i< 10; i++){
-    
+// complete logic of the janeken game
+const jankenGame = () => {
+  let playerScore = 0;
+  let computerScore = 0;
+  let options = ["rock", "paper", "scissors"];
+  let moves = 10;
 
-    rock.addEventListener("click",() =>{
-        
+  const playGame = () => {
+    let rockBtn = document.getElementById("r");
+    let paperBtn = document.getElementById("p");
+    let scissorsBtn = document.getElementById("s");
+    let map = new Map();
+    map.set("r", "rock");
+    map.set("p", "paper");
+    map.set("s", "scissors");
+
+    let options = [rockBtn, paperBtn, scissorsBtn];
+    options.forEach((option) => {
+      option.addEventListener("click", () => {
+        // moves get reduced every time player choses a shape
+        moves--;
+        let computerMove = randomComputerMove();
+
+        if (moves == 0) {
+          // if no moves, its time to end the game and decide the winner
+          gameOver();
+        }
+        winner(map.get(option.id), computerMove);
+      });
     });
-}
+  };
 
-// Computer's random move
-let computerMove = () =>{
-    let move = Math.floor(Math.random()*3);
-    if(move == 0){
-        return rock;
-    }else if (move == 1){
-        return paper;
-    }else{
-        return scissors;
+  // function to decide game winner
+  let gameOver = () => {
+    if (playerScore == computerScore) {
+      console.log("Tie");
+      document.getElementById("result-final-stat").innerText = "Tie";
+    } else if (playerScore > computerScore) {
+      console.log("Player won Game");
+      document.getElementById("result-final-stat").innerText = "Player won";
+    } else {
+      console.log("Computer won Game");
+      document.getElementById("result-final-stat").innerText = "Computer won";
     }
-}
+  };
+  // function to get computer's move
+  let randomComputerMove = () => {
+    let move = Math.floor(Math.random() * 3);
+    return options[move];
+  };
+
+  /* function to decide the winner of the move
+     rock beats scissors
+     scissors beats paper
+     paper beats rock
+  */
+  let winner = (playerMove, computerMove) => {
+    let compScoreVal = document.getElementById("compScoreVal");
+    let playerScoreVal = document.getElementById("userScoreVal");
+    if (playerMove == computerMove) {
+      console.log("Tie");
+    } else if (playerMove == "rock") {
+      if (computerMove == "paper") {
+        console.log("Computer Won");
+        compScoreVal.innerText++;
+        computerScore++;
+      } else if (computerMove == "scissors") {
+        console.log("Player won");
+        playerScoreVal.innerText++;
+        playerScore++;
+      }
+    } else if (playerMove == "paper") {
+      if (computerMove == "scissors") {
+        console.log("Computer Won");
+        compScoreVal.innerText++;
+        computerScore++;
+      } else if (computerMove == "rock") {
+        console.log("Player won");
+        playerScoreVal.innerText++;
+        playerScore++;
+      }
+    } else {
+      if (computerMove == "paper") {
+        compScoreVal.innerText++;
+        console.log("Computer Won");
+        computerScore++;
+      } else if (computerMove == "rock") {
+        console.log("Player won");
+        playerScoreVal.innerText++;
+        playerScore++;
+      }
+    }
+  };
+
+  // calling playGame function
+  playGame();
+};
+
+// calling the game function
+jankenGame();
